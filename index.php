@@ -17,7 +17,7 @@ if (!$conn) {
 }
 
 // Fonction pour générer un URL court aléatoire
-function generateShortURL($length = 8) {
+function generateShortURL($length = 6) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $shortURL = '';
     for ($i = 0; $i < $length; $i++) {
@@ -40,8 +40,9 @@ if(isset($_POST) && isset($_POST['long_url'])) {
     $result = mysqli_query($conn, $sql);
 
     // Si l'URL court existe déjà, générer un nouvel URL court
-    if(mysqli_num_rows($result) > 0) {
+    while(mysqli_num_rows($result) > 0) {
         $short_url = generateShortURL();
+        $result = mysqli_query($conn, $sql);
     }
 
     // Insérer une nouvelle URL dans la table urls
@@ -54,9 +55,28 @@ if(isset($_POST) && isset($_POST['long_url'])) {
         echo json_encode(array('error' => 'Erreur lors de la création de l\'URL court'));
     }
 
+} else if(isset($_GET['short_url'])) {
+
+    // Récupérer l'URL courte depuis la requête HTTP
+    $short_url = $_GET['short_url'];
+
+    // Rechercher l'URL longue correspondante dans la base de données
+    $sql = "SELECT * FROM urls WHERE short_url = '$short_url'";
+    $result = mysqli_query($conn, $sql);
+
+    // Si l'URL longue est trouvée, rediriger l'utilisateur vers cette URL
+    if(mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $long_url = $row['long_url'];
+        header("Location: $long_url");
+    } else {
+        // Si l'URL longue n'est pas trouvée, renvoyer un message d'erreur
+        echo json_encode(array('error' => 'URL courte non valide'));
+    }
+
 } else {
-    // Si aucune URL longue n'a été fournie, renvoyer un message d'erreur
-    echo json_encode(array('error' => 'Aucune URL longue fournie'));
+    // Si aucune URL longue ou courte n'a été fournie, renvoyer un message d'erreur
+    echo json_encode(array('error' => 'Aucune URL fournie'));
 }
 
 // Fermer la connexion à la base de données
