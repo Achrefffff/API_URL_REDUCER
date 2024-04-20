@@ -62,6 +62,7 @@ if(isset($_POST) && isset($_POST['long_url'])) {
 
     // Récupérer l'URL courte depuis la requête HTTP
     $short_url = $_GET['short_url'];
+    var_dump($short_url);
 
     // Rechercher l'URL longue correspondante dans la base de données
     $sql = "SELECT * FROM urls WHERE short_url = '$short_url'";
