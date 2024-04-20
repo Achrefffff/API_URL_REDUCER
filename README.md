@@ -2,7 +2,8 @@ URL Reducer API
 
 
 DESCRIPTION
-L'API URL Reducer est un service simple qui permet de raccourcir les URLs.
+
+ L'API URL Reducer est un service simple qui permet de raccourcir les URLs.
  Elle stocke les URLs longues et leurs équivalents courts dans une base de données MySQL et fournit des endpoints pour créer de nouvelles URLs courtes et rediriger vers les URLs longues.
 
 
