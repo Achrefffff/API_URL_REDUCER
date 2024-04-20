@@ -28,12 +28,12 @@ if(isset($_GET['long_url'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // L'URL longue existe déjà, récupérer l'URL courte correspondante
+        
         $row = $result->fetch_assoc();
         $short_url = $row['short_url'];
         echo $short_url;
     } else {
-        // L'URL longue n'existe pas, générer une nouvelle URL courte et l'insérer dans la base de données
+        
         $short_url = generateShortURL($conn);
 
         $stmt = $conn->prepare("INSERT INTO urls (long_url, short_url) VALUES (?, ?)");
@@ -52,7 +52,7 @@ if(isset($_GET['long_url'])) {
 function generateShortURL($conn) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    // Générer une URL courte unique
+    // Générer  URL courte unique
     do {
         $shortURL = substr(str_shuffle($characters), 0, 10);
         $sql = "SELECT COUNT(*) AS count FROM urls WHERE short_url = ?";
