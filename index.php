@@ -4,7 +4,7 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Content-Type: application/json');
 
-// Se connecter à la base de données
+// connexion bd
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -12,15 +12,16 @@ $dbname = "reducer2";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Vérifier la connexion
+// vérification connexion
 if ($conn->connect_error) {
     die("Connexion échouée : " . $conn->connect_error);
 }
 
+// si url longue existe dans la requete 
 if(isset($_GET['long_url'])) {
     $long_url = $_GET['long_url'];
 
-    // Vérifier si l'URL longue existe déjà
+    // Vérification url longue si existe deja dans la bd
     $sql = "SELECT short_url FROM urls WHERE long_url = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $long_url);
@@ -48,11 +49,11 @@ if(isset($_GET['long_url'])) {
 } else {
     echo "Aucune URL longue reçue";
 }
-
+//  générer  URL courte unique
 function generateShortURL($conn) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    // Générer  URL courte unique
+    
     do {
         $shortURL = substr(str_shuffle($characters), 0, 10);
         $sql = "SELECT COUNT(*) AS count FROM urls WHERE short_url = ?";

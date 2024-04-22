@@ -13,9 +13,10 @@ if ($conn->connect_error) {
 }
 
 if(isset($_GET['short_url'])) {
+    // Récuperer Url courte depuis la requéte
     $short_url = $_GET['short_url'];
 
-    
+    //Rechercher Url longue associée à l'URL courte dans la bd
     $sql = "SELECT long_url FROM urls WHERE short_url = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $short_url);
